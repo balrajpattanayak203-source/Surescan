@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SureScan</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#12284c"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--tx:#0f1b2d;--mu:#5b6676;--gr:#2f9e44;--nv:#12284c;--rd:#d6336c;--am:#e8890c;--bd:#e1e6e3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1520;--card:#162131;--tx:#e8eef6;--mu:#9aa7b8;--gr:#51cf66;--nv:#9db8e6;--rd:#ff6b9a;--am:#ffa94d;--bd:#26344a}}
+:root[data-theme="dark"]{--bg:#0d1520;--card:#162131;--tx:#e8eef6;--mu:#9aa7b8;--gr:#51cf66;--nv:#9db8e6;--rd:#ff6b9a;--am:#ffa94d;--bd:#26344a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:520px;margin:0 auto;padding:14px 16px 40px}
+.top{display:flex;align-items:center;gap:10px}.top b{font-size:26px;letter-spacing:-.5px}.top b span{color:var(--gr)}
+.tag{color:var(--mu);font-size:13px;margin:2px 0 14px}
+.btn{width:100%;border:0;border-radius:16px;padding:18px;font-size:19px;font-weight:700;color:#fff;background:linear-gradient(135deg,#2f9e44,#12284c);cursor:pointer}
+.row{display:flex;gap:8px;margin-top:10px}
+input[type=text]{flex:1;min-width:0;padding:13px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:16px}
+.sm{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:12px 14px;font-size:15px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.chips button{font-size:13px;padding:7px 10px;border-radius:99px}
+.tabs{display:flex;gap:6px;margin:14px 0}.tabs button{flex:1}.tabs .on{background:var(--nv);color:var(--bg);border-color:var(--nv)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-top:12px}
+.card h3{margin:0 0 8px;font-size:15px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
+.ver{border-radius:16px;padding:16px;color:#fff;margin-top:12px}.ver h2{margin:0;font-size:22px}
+.u{background:#3b5b8c}.g{background:#2f9e44}.a{background:#e8890c}.r{background:#d6336c;animation:p 1s infinite}
+@keyframes p{50%{opacity:.7}}
+.big{font-size:44px;font-weight:800;line-height:1}
+.bar{height:10px;border-radius:9px;background:rgba(255,255,255,.35);margin-top:8px;overflow:hidden}.bar i{display:block;height:100%;background:#fff}
+ul{margin:0;padding:0;list-style:none}li{padding:6px 0;border-bottom:1px solid var(--bd);font-size:15px}li:last-child{border:0}
+.t{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;color:#fff;margin-right:6px}
+.ok{background:#2f9e44}.warn{background:#e8890c}.bad{background:#d6336c}.na{background:#6b7686}
+.mu{color:var(--mu);font-size:14px}
+#cam{position:fixed;inset:0;background:#000;z-index:9;display:none;flex-direction:column}
+#cam video{flex:1;width:100%;object-fit:cover;min-height:0}
+#cam .f{position:absolute;left:12%;right:12%;top:35%;height:22%;border:3px solid #51cf66;border-radius:14px;box-shadow:0 0 0 999px rgba(0,0,0,.45)}
+#cam button{margin:14px;padding:14px;border-radius:14px;border:0;font-size:17px;font-weight:700}
+.hi{display:flex;justify-content:space-between;gap:8px;cursor:pointer}
+svg{max-width:100%;height:auto}
+</style></head><body><div class="w">
+<div class="top">
+<svg width="46" height="52" viewBox="0 0 92 104" aria-hidden="true"><path d="M46 4 8 16v34c0 26 17 42 38 50z" fill="#2f9e44"/><path d="M46 4l38 12v34c0 26-17 42-38 50z" fill="#12284c"/><circle cx="44" cy="44" r="22" fill="#fff"/><circle cx="44" cy="44" r="15" fill="#12284c"/><path d="M36 44l6 7 11-13" stroke="#51cf66" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 60l16 18" stroke="#12284c" stroke-width="7" stroke-linecap="round"/></svg>
+<b>Sure<span>Scan</span></b></div>
+<div class="tag">Authentic Today. Trusted Always.</div>
+<button class="btn" id="scan">📷 Scan</button>
+<div class="row"><input type="text" id="man" inputmode="numeric" placeholder="Or type barcode number"><button class="sm" id="go">Check</button></div>
+<div class="mu" style="margin-top:8px">Try a demo:</div>
+<div class="chips" id="demo"></div>
+<input type="file" id="pic" accept="image/*" capture="environment" hidden>
+<div class="tabs"><button class="sm on" id="t1">Result</button><button class="sm" id="t2">📜 History</button></div>
+<div id="out"><div class="card mu">Tap <b>Scan</b>, point the camera at a barcode and the result will appear here.</div></div>
+<div id="his" style="display:none"></div>
+</div>
+<div id="cam"><video id="vid" playsinline muted></video><div class="f"></div><button id="cc">Cancel</button></div>
+<script>
+var $=function(i){return document.getElementById(i)};
+var DB={
+'5449000000996':{n:'Coca-Cola Original 330 ml',b:'The Coca-Cola Company',cat:'Beverage',pk:['Aluminium can','rec','Aluminium cans can be recycled again and again.'],ing:[['Carbonated water','ok','Base of the drink.'],['Sugar','warn','High sugar, so limit intake.'],['Caramel colour E150d','warn','Colouring, keep consumption moderate.'],['Phosphoric acid','warn','Acidulant that can affect teeth when frequent.'],['Caffeine','ok','Small amount, mild stimulant.']]},
+'3017620422003':{n:'Nutella Hazelnut Spread 400 g',b:'Ferrero',cat:'Spread',pk:['Glass jar + plastic lid','rec','Rinse the jar and recycle glass and lid separately.'],ing:[['Sugar','warn','Main ingredient, so high in sugar.'],['Palm oil','warn','High in saturated fat; sourcing is an environmental concern.'],['Hazelnuts','ok','Source of healthy fats. Allergen.'],['Cocoa','ok','Contains antioxidants.'],['Skimmed milk powder','ok','Allergen (milk).'],['Soy lecithin','ok','Emulsifier. Allergen (soy).']]},
+'7622210449283':{n:'Oreo Original Biscuits',b:'Mondelez',cat:'Biscuits',pk:['Multi-layer plastic wrapper','harm','Mixed-material film is rarely recycled and persists in the environment.'],ing:[['Wheat flour','ok','Main base. Contains gluten.'],['Sugar','warn','High sugar content.'],['Palm oil','warn','Saturated fat; sourcing concern.'],['Cocoa powder','ok','Contains antioxidants.'],['Glucose-fructose syrup','warn','Added sugar.'],['Soy lecithin','ok','Emulsifier. Allergen (soy).']]}};
+var PRE=[[0,139,'USA/Canada'],[300,379,'France'],[400,440,'Germany'],[450,459,'Japan'],[490,499,'Japan'],[500,509,'UK'],[539,539,'Ireland'],[540,549,'Belgium/Luxembourg'],[690,699,'China'],[760,769,'Switzerland'],[800,839,'Italy'],[840,849,'Spain'],[890,890,'India'],[930,939,'Australia'],[978,979,'Books (ISBN)']];
+var DEMOS=[['Coca-Cola','5449000000996'],['Nutella','3017620422003'],['Oreo','7622210449283'],['Unknown valid','1234567890128'],['Fake test','5449000000995']];
+var ctx=null,stream=null,timer=null,H=[],tok=0;
+try{H=JSON.parse(localStorage.getItem('ss_h')||'[]')}catch(e){}
+function save(){try{localStorage.setItem('ss_h',JSON.stringify(H))}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
+DEMOS.forEach(function(d){var b=document.createElement('button');b.className='sm';b.textContent=d[0];b.onclick=function(){ctx=ctx||mk();run(d[1])};$('demo').appendChild(b)});
+function mk(){try{return new (window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}
+function buzz(){if(navigator.vibrate)try{navigator.vibrate([300,150,300,150,500])}catch(e){}
+if(!ctx)return;try{ctx.resume();var t=ctx.currentTime;for(var i=0;i<6;i++){var o=ctx.createOscillator(),g=ctx.createGain();o.type='square';o.frequency.value=i%2?620:900;g.gain.value=.25;o.connect(g);g.connect(ctx.destination);o.start(t+i*.25);o.stop(t+i*.25+.22)}}catch(e){}}
+function chk(c){var s=0,n=c.length;for(var i=0;i<n-1;i++){var d=+c[n-2-i];s+=d*(i%2?1:3)}return (10-s%10)%10===+c[n-1]}
+function origin(c){if(c.length!==13)return null;var p=+c.slice(0,3);for(var i=0;i<PRE.length;i++)if(p>=PRE[i][0]&&p<=PRE[i][1])return PRE[i][2];return null}
+/* ---------- online lookup ---------- */
+var SRC=[['world.openfoodfacts.org','Open Food Facts'],['world.openbeautyfacts.org','Open Beauty Facts'],['world.openproductsfacts.org','Open Products Facts']];
+var WARN=[[/sugar|glucose|fructose|syrup|dextrose|sucrose/i,'Added sugar, so limit intake.'],[/palm/i,'Palm oil: high in saturated fat; sourcing is an environmental concern.'],[/hydrogenated/i,'Hydrogenated fat, best avoided.'],[/colou?r|e1[0-9]{2}\b|tartrazine|caramel/i,'Colouring agent, keep consumption moderate.'],[/preservative|benzoate|sorbate|nitrite|e2[0-9]{2}\b/i,'Preservative, fine in small amounts.'],[/aspartame|sucralose|acesulfame|saccharin|sweetener/i,'Artificial sweetener, limit intake.'],[/monosodium|glutamate|e621/i,'Flavour enhancer (MSG), some people are sensitive.'],[/artificial flavou?r|flavou?ring/i,'Added flavouring.'],[/phosphoric|phosphate/i,'Phosphate acidulant, high intake may affect bones and teeth.'],[/maltodextrin|modified starch/i,'Refined carbohydrate filler.']];
+var GOOD=[[/water|aqua/i,'Base ingredient.'],[/milk|whey|curd/i,'Dairy source of protein and calcium. Allergen (milk).'],[/wheat|flour|oat|rice|millet|corn|barley|whole grain/i,'Grain / carbohydrate source. May contain gluten.'],[/nut|almond|hazelnut|peanut|cashew/i,'Source of healthy fats. Nut allergen.'],[/cocoa|cacao/i,'Contains antioxidants.'],[/vitamin|mineral|iron|calcium|zinc/i,'Added nutrient.'],[/fruit|vegetable|tomato|onion|garlic|spice|turmeric|ginger/i,'Natural food ingredient.'],[/soy|lecithin/i,'Emulsifier. Allergen (soy).'],[/salt|sodium chloride/i,'Salt, keep intake moderate.'],[/oil|sunflower|olive|canola/i,'Vegetable oil.']];
+function ingList(txt){var out=[];String(txt||'').replace(/_/g,'').split(/[,;]/).forEach(function(x){x=x.replace(/\(.*$/,'').trim();if(x.length<2||x.length>40||out.length>=18)return;var cl='na',nt='No specific notes.',i;
+for(i=0;i<WARN.length;i++)if(WARN[i][0].test(x)){cl='warn';nt=WARN[i][1];break}
+if(cl=='na')for(i=0;i<GOOD.length;i++)if(GOOD[i][0].test(x)){cl='ok';nt=GOOD[i][1];break}
+out.push([x,cl,nt])});return out}
+function pkInfo(j){var t=((j.packaging_tags||[]).join(' ')+' '+(j.packaging||'')).toLowerCase().replace(/en:/g,'');if(!t.trim())return null;
+var bio=/compost|biodegrad|bio-based/.test(t),rec=/glass|verre|metal|alumin|steel|\bcan\b|tin|paper|cardboard|carton|kart/.test(t),pl=/plastic|film|sachet|pet\b|hdpe|pouch|wrapper|polyethyl|polyprop|foil|sleeve|bottle|cup/.test(t);
+var name=t.replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();name=name.charAt(0).toUpperCase()+name.slice(1,60);
+if(bio)return[name,'bio','Biodegradable or compostable packaging.'];
+if(rec&&pl)return[name,'mix','Mixed materials: separate the parts and recycle each where possible.'];
+if(rec)return[name,'rec','Commonly recyclable material. Rinse and recycle.'];
+if(pl)return[name,'harm','Plastic packaging is harmful if not recycled. Dispose of it properly.'];
+return[name,'na','Packaging material not clearly identified.']}
+async function look(c){if(DB[c]){var d=DB[c];d.src='SureScan verified list';d.ingRaw=1;return d}
+var err=0,fl='product_name,brands,categories,countries,quantity,packaging,packaging_tags,ecoscore_grade,ingredients_text,allergens,nutriscore_grade,image_front_small_url';
+for(var i=0;i<SRC.length;i++){try{var ac=new AbortController(),tm=setTimeout(function(){ac.abort()},7000);
+var r=await fetch('https://'+SRC[i][0]+'/api/v2/product/'+c+'.json?fields='+fl,{signal:ac.signal});clearTimeout(tm);var j=await r.json();
+if(j&&j.status===1&&j.product&&(j.product.product_name||j.product.brands)){var q=j.product;
+return{n:q.product_name||'Unnamed product',b:q.brands||'',cat:(q.categories||'').split(',')[0].replace(/^\w\w:/,''),cty:q.countries||'',qty:q.quantity||'',src:SRC[i][1],img:q.image_front_small_url||'',
+pk:pkInfo(q),ing:ingList(q.ingredients_text),ingRaw:q.ingredients_text||'',alg:q.allergens||'',eco:q.ecoscore_grade,nut:q.nutriscore_grade}}}catch(e){err++}}
+return err===SRC.length?null:false}
+/* ---------- scoring ---------- */
+function assess(c,p,st){var R=[],s=null;
+if(!/^\d{8}$|^\d{12,13}$/.test(c))return{s:5,R:[['-','Not a valid EAN/UPC barcode length (8, 12 or 13 digits)']]};
+var o=origin(c);
+if(!chk(c))return{s:15,o:o,R:[['-','Check digit is wrong. Real barcodes always pass this test; copied or made-up ones often fail.']].concat(o?[['+','Country prefix looks valid: '+o]]:[])};
+R.push(['+','Barcode check digit is valid']);
+if(o)R.push(['+','Country prefix matches: '+o]);else if(c.length===13)R.push(['i','Country prefix is not recognised']);
+var pat=/^(\d)\1+$/.test(c)||'01234567890123456789'.indexOf(c.slice(0,6))>-1;
+if(pat)R.push(['-','Digits follow an obvious repeating or sequential pattern']);
+if(st=='found'){R.push(['+','Product is registered in a public database ('+p.src+')']);s=88+(p.b?3:0)+(p.img?3:0)+(p.ingRaw?3:0)}
+else if(st=='nf'){R.push(['i','Not found in public databases. Many local products are missing, so this alone does not mean it is fake.']);s=60}
+else if(st=='off'){R.push(['i','Could not reach the online databases (check your internet).']);s=60}
+if(pat&&s!=null)s=Math.min(s,25);
+return{s:s,R:R,o:o}}
+function bars(c,x,y,w,h,col){var r='',px=x,seed=0;for(var i=0;i<c.length;i++)seed+=+c[i]*(i+3);for(i=0;i<34;i++){var bw=1+((+c[i%c.length]+i*seed)%3);r+='<rect x="'+px+'" y="'+y+'" width="'+bw+'" height="'+h+'" fill="'+col+'"/>';px+=bw+1+((i*seed)%2);if(px>x+w)break}return r}
+function cmp(c,p){function pack(x,t,col,code,bad){return '<g><rect x="'+x+'" y="14" width="118" height="150" rx="10" fill="none" stroke="'+col+'" stroke-width="'+(bad?3:2)+'"'+(bad?' stroke-dasharray="6 4"':'')+'/><text x="'+(x+59)+'" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="'+col+'">'+t+'</text><rect x="'+(x+14)+'" y="44" width="90" height="50" rx="6" fill="'+col+'" opacity=".18"/><text x="'+(x+59)+'" y="74" text-anchor="middle" font-size="10" fill="currentColor">'+(bad?'Blurry logo / print':'Sharp logo / print')+'</text>'+bars(code,x+16,104,86,34,'currentColor')+'<text x="'+(x+59)+'" y="154" text-anchor="middle" font-size="9" fill="currentColor">'+code+'</text></g>'}
+return '<svg viewBox="0 0 280 178" role="img" aria-label="Comparison">'+pack(8,'GENUINE','#2f9e44','5449000000996',0)+pack(154,'SCANNED','#d6336c',c,1)+'</svg><ul><li>🔎 <b>Barcode:</b> the scanned code fails verification; genuine packs print a valid one.</li><li>🖨️ <b>Print quality:</b> look for blurry logos, spelling errors, faded colours.</li><li>🏷️ <b>Seals &amp; batch:</b> check tamper seal, batch number and expiry date.</li><li>🛒 <b>Seller:</b> buy only from authorised stores.</li></ul><div class="mu">Illustrative comparison. For a real photo match, compare with the brand’s official website.</div>'}
+/* ---------- render ---------- */
+function render(c,p,st){var a=assess(c,p,st),s=a.s,cls,v;
+if(s==null){cls='u';v='⏳ Checking online…'}
+else if(s>=80){cls='g';v='✅ Likely genuine'}
+else if(s>=55){if(st=='found'){cls='a';v='⚠️ Doubtful, verify'}else{cls='u';v='ℹ️ Valid barcode, not verified'}}
+else{cls='r';v='🚨 Suspected fake product'}
+var h='<div class="ver '+cls+'"><div class="big">'+(s==null?'…':s+'%')+'</div><h2>'+v+'</h2><div>Originality score</div><div class="bar"><i style="width:'+(s||0)+'%"></i></div>'+(cls=='r'?'<p style="margin:10px 0 0;font-weight:700">WARNING: Do not buy or use this product until it is verified.</p>':'')+(cls=='u'&&s!=null?'<p style="margin:10px 0 0">The barcode itself is fine, but we could not confirm the product. Check the brand on Google below.</p>':'')+'</div>';
+var q=encodeURIComponent((p?p.n+' '+(p.b||''):'barcode '+c)+' official');
+h+='<div class="card"><h3>Product details</h3>'+(p?(p.img?'<img src="'+esc(p.img)+'" alt="" style="float:right;max-width:90px;max-height:110px;border-radius:8px;margin-left:10px" referrerpolicy="no-referrer">':'')+'<b>'+esc(p.n)+'</b><br><span class="mu">'+esc([p.b,p.cat,p.qty].filter(Boolean).join(' · '))+'</span>'+(p.cty?'<br><span class="mu">Sold in: '+esc(p.cty)+'</span>':''):'<b>'+(st=='wait'?'Looking up product…':'Product not found')+'</b>')+'<br><span class="mu">Barcode: '+c+(a.o?' · Origin: '+a.o:'')+(p?' · Source: '+esc(p.src):'')+'</span><div style="clear:both"></div><a class="sm" style="display:inline-block;margin-top:10px;text-decoration:none" target="_blank" rel="noopener" href="https://www.google.com/search?q='+q+'">🔎 Check brand on Google</a></div>';
+h+='<div class="card"><h3>Why this score</h3><ul>'+a.R.map(function(r){return '<li>'+({'+':'🟢','-':'🔴','i':'ℹ️'}[r[0]])+' '+r[1]+'</li>'}).join('')+'</ul></div>';
+if(p){var m=p.pk?{rec:['♻️ Recyclable','ok'],bio:['🌿 Biodegradable','ok'],harm:['☠️ Harmful to environment','bad'],mix:['⚠️ Mixed materials','warn'],na:['Unclear','na']}[p.pk[1]]:null;
+h+='<div class="card"><h3>Environmental score</h3>'+(m?'<span class="t '+m[1]+'">'+m[0]+'</span> <b>'+esc(p.pk[0])+'</b><div class="mu" style="margin-top:6px">'+esc(p.pk[2])+'</div>':'<span class="t na">No data</span><span class="mu">Packaging details are not listed for this product.</span>')+(p.eco&&/^[a-e]$/.test(p.eco)?'<div style="margin-top:8px"><span class="t '+(p.eco<'c'?'ok':p.eco=='c'?'warn':'bad')+'">Eco-Score '+p.eco.toUpperCase()+'</span></div>':'')+'</div>';
+h+='<div class="card"><h3>Ingredient analysis</h3>'+(p.ing&&p.ing.length?'<ul>'+p.ing.map(function(i){return '<li><span class="t '+i[1]+'">'+({ok:'Useful',warn:'Caution',na:'Neutral'}[i[1]])+'</span><b>'+esc(i[0])+'</b><br><span class="mu">'+esc(i[2])+'</span></li>'}).join('')+'</ul>'+(p.alg?'<div class="mu" style="margin-top:8px">Allergens: '+esc(p.alg.replace(/en:/g,''))+'</div>':'')+(p.nut&&/^[a-e]$/.test(p.nut)?'<div style="margin-top:8px"><span class="t '+(p.nut<'c'?'ok':p.nut=='c'?'warn':'bad')+'">Nutri-Score '+p.nut.toUpperCase()+'</span></div>':''):'<span class="t na">No data</span><span class="mu">Ingredients are not listed for this product (e.g. non-food items).</span>')+'</div>'}
+else if(st!='wait')h+='<div class="card"><h3>Environmental score &amp; ingredients</h3><span class="t na">No data</span><span class="mu">Available only when the product is found in a database.</span></div>';
+if(s!=null&&s<55)h+='<div class="card"><h3>Comparison with genuine product</h3>'+cmp(c,p)+'</div>';
+h+='<div class="mu" style="margin-top:12px">Guidance only: based on barcode validity and public databases. It cannot prove a product is genuine.</div>';
+$('out').innerHTML=h;return a}
+async function run(c,noSave){c=(c||'').replace(/\D/g,'');var my=++tok;tab(1);window.scrollTo(0,0);
+render(c,null,'wait');if(!/^\d{8}$|^\d{12,13}$/.test(c)||!chk(c)){fin(c,null,'nf',noSave);return}
+var p=await look(c);if(my!==tok)return;fin(c,p||null,p?'found':(p===null?'off':'nf'),noSave)}
+function fin(c,p,st,noSave){var a=render(c,p,st);if(a.s<55)buzz();
+if(!noSave){H=H.filter(function(x){return x.c!==c});H.unshift({c:c,n:p?p.n:'Unknown product',s:a.s,t:Date.now()});H=H.slice(0,50);save();hist()}}
+function hist(){var h='<div class="card"><h3>Scan history</h3>'+(H.length?'<ul>'+H.map(function(x,i){return '<li class="hi" data-i="'+i+'"><span>'+(x.s>=80?'✅':x.s>=55?'ℹ️':'🚨')+' '+esc(x.n)+'<br><span class="mu">'+x.c+' · '+new Date(x.t).toLocaleString()+'</span></span><b>'+x.s+'%</b></li>'}).join('')+'</ul><button class="sm" id="clr" style="margin-top:10px">Clear history</button>':'<span class="mu">No scans yet.</span>')+'</div>';
+$('his').innerHTML=h;var c=$('clr');if(c)c.onclick=function(){H=[];save();hist()};
+Array.prototype.forEach.call(document.querySelectorAll('.hi'),function(e){e.onclick=function(){run(H[+e.dataset.i].c,1)}})}
+function tab(n){$('out').style.display=n==1?'':'none';$('his').style.display=n==2?'':'none';$('t1').className='sm'+(n==1?' on':'');$('t2').className='sm'+(n==2?' on':'')}
+$('t1').onclick=function(){tab(1)};$('t2').onclick=function(){hist();tab(2)};
+$('go').onclick=function(){ctx=ctx||mk();run($('man').value)};
+function stop(){clearInterval(timer);if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}$('vid').srcObject=null;$('cam').style.display='none'}
+$('cc').onclick=stop;
+$('scan').onclick=async function(){ctx=ctx||mk();
+if(!('BarcodeDetector' in window)||!navigator.mediaDevices){$('pic').click();return}
+try{var det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
+stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+var v=$('vid');v.srcObject=stream;$('cam').style.display='flex';await v.play();
+timer=setInterval(async function(){try{var r=await det.detect(v);if(r.length){var c=r[0].rawValue;stop();run(c)}}catch(e){}},250)}
+catch(e){stop();$('out').innerHTML='<div class="card">Camera could not open ('+(e.name||'error')+'). Allow camera permission, or take a photo of the barcode instead.</div>';tab(1);$('pic').click()}};
+$('pic').onchange=async function(){var f=this.files[0];this.value='';if(!f)return;
+try{var det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});var r=await det.detect(await createImageBitmap(f));if(r.length)run(r[0].rawValue);else{$('out').innerHTML='<div class="card">No barcode found in that photo. Try again, closer and well lit, or type the number.</div>';tab(1)}}
+catch(e){$('out').innerHTML='<div class="card">Barcode reading is not supported in this browser. Please type the number under the barcode, or open this page in Chrome on Android.</div>';tab(1)}};
+hist();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(function(){});
+</script></body></html>
